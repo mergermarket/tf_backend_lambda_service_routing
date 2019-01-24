@@ -54,24 +54,7 @@ resource "aws_alb_target_group" "target_group" {
       local.target_group_name
   }"
 
-  # port will be set dynamically, but for some reason AWS requires a value
-  port                 = "31337"
-  protocol             = "HTTP"
-  vpc_id               = "${var.vpc_id}"
-  deregistration_delay = "${var.deregistration_delay}"
-
-  health_check {
-    interval            = "${var.health_check_interval}"
-    path                = "${var.health_check_path}"
-    timeout             = "${var.health_check_timeout}"
-    healthy_threshold   = "${var.health_check_healthy_threshold}"
-    unhealthy_threshold = "${var.health_check_unhealthy_threshold}"
-    matcher             = "${var.health_check_matcher}"
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
+  target_type = "lambda"
 }
 
 resource "aws_route53_record" "dns_record" {
